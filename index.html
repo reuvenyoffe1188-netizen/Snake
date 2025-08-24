@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,37 +10,75 @@
 </head>
 <body>
 <div id="ui">
-  <span id="sun">☀ 50</span>
-  <span id="wave">Wave 1</span>
-  <button id="plantBtn">Peashooter (100)</button>
-  <button id="wallBtn">Wallnut (50)</button>
-  <button id="shovelBtn">Shovel</button>
+  <span id="sun">☀ 50</span>
+  <span id="wave">Wave 1</span>
+  <button id="plantBtn">Peashooter (100)</button>
+  <button id="wallBtn">Wallnut (50)</button>
+  <button id="shovelBtn">Shovel</button>
 </div>
+
 <canvas id="game"></canvas>
+
+<!-- PWA Install Button -->
 <button id="installBtn" style="position:fixed;bottom:10px;left:10px;z-index:20;display:none;">Install App</button>
+
+<!-- Settings Panel -->
+<div id="settings" style="display:none; position:absolute; top:20px; left:20px; background:#fff; color:#000; padding:10px; border-radius:10px; z-index:1000;">
+  <h3>Game Settings</h3>
+  <label>Zombie Speed: <input type="number" id="zombieSpeed" value="0.15" step="0.01"></label><br>
+  <label>Zombie Health: <input type="number" id="zombieHP" value="120"></label><br>
+  <label>Peashooter Damage: <input type="number" id="peaDamage" value="20"></label><br>
+  <label>Sun Spawn Chance (0–1): <input type="number" step="0.001" id="sunChance" value="0.004"></label><br>
+  <label>Sun Value: <input type="number" id="sunValue" value="500"></label><br>
+  <button onclick="applySettings()">Apply</button>
+</div>
+<button id="settingsBtn" style="position:absolute; top:10px; right:10px; z-index:1001;">⚙️</button>
+
 <script src="game.js"></script>
 <script>
 if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('sw.js');
-  });
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js');
+  });
 }
 
 let deferredPrompt;
 window.addEventListener('beforeinstallprompt', (e) => {
-  e.preventDefault();
-  deferredPrompt = e;
-  document.getElementById('installBtn').style.display='block';
+  e.preventDefault();
+  deferredPrompt = e;
+  document.getElementById('installBtn').style.display='block';
 });
 document.getElementById('installBtn').addEventListener('click', ()=>{
-  if(deferredPrompt){
-    deferredPrompt.prompt();
-    deferredPrompt.userChoice.then(choice=>{
-      deferredPrompt = null;
-      document.getElementById('installBtn').style.display='none';
-    });
-  }
+  if(deferredPrompt){
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then(choice=>{
+      deferredPrompt = null;
+      document.getElementById('installBtn').style.display='none';
+    });
+  }
 });
+
+// Game settings panel
+let gameSettings = {
+  zombieSpeed: 0.15,
+  zombieHP: 120,
+  peaDamage: 20,
+  sunChance: 0.004,
+  sunValue: 500
+};
+
+document.getElementById("settingsBtn").onclick = () => {
+  let s = document.getElementById("settings");
+  s.style.display = (s.style.display === "none") ? "block" : "none";
+};
+
+function applySettings() {
+  gameSettings.zombieSpeed = parseFloat(document.getElementById("zombieSpeed").value);
+  gameSettings.zombieHP = parseInt(document.getElementById("zombieHP").value);
+  gameSettings.peaDamage = parseInt(document.getElementById("peaDamage").value);
+  gameSettings.sunChance = parseFloat(document.getElementById("sunChance").value);
+  gameSettings.sunValue = parseInt(document.getElementById("sunValue").value);
+}
 </script>
 </body>
 </html>
