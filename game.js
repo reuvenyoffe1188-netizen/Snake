@@ -55,7 +55,7 @@ canvas.addEventListener('pointerdown', e=>{
   updateUI();
 });
 
-function spawnSun(){ const x=Math.random()*W,y=-20; suns.push({x,y,vy:0.6+Math.random()*0.4,val:25,alive:true}); }
+function spawnSun(){ const x=Math.random()*W,y=-20; suns.push({x,y,vy:0.6+Math.random()*0.4,val:500,alive:true}); }
 function spawnZombie(){ const row=Math.floor(Math.random()*ROWS); zombies.push({x: W+10,row,hp:120+wave*10,spd:0.15+Math.random()*0.1+wave*0.01,biteTimer:0}); }
 
 function update(dt){
